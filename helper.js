@@ -12,3 +12,7 @@ export async function deleteProductByID(id) {
 export async function addProducts(product) {
   return await client.db("b52-products").collection("products").insertOne(product);
 }
+
+export async function updateProducts(id,updatedProduct) {
+  return await client.db("b52-products").collection("products").updateOne({id: id},{$set:updatedProduct});
+}

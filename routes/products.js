@@ -1,14 +1,14 @@
-import express  from 'express';
-import { getAllProducts, getProductById, deleteProductByID, addProducts } from '../helper.js'
+import express  from "express"
+import { getAllProducts, getProductById, deleteProductByID, addProducts ,updateProducts} from '../helper.js'
 
 
 const router = express.Router(); //express router library
 
 
 
-
+//REST API ENDPOINTS
 //get all products and search query(category, rating and multiple filter)
-router.get("/products", async(req, res) => {
+router.get('/', async(req, res) => {
     const{category,rating} = req.query
     //console.log(category)
     console.log(req.query)
@@ -33,7 +33,7 @@ router.get("/products", async(req, res) => {
   res.send(product);
   })
   //get product by id
-  router.get("/products/:id",async (req, res) => {
+  router.get('/:id',async (req, res) => {
     const { id } = req.params;
     console.log(req.params, id);
   //--------direct data
@@ -45,20 +45,20 @@ router.get("/products", async(req, res) => {
   //-------querying from MongoDB
   //db.products.findOne({id:"1"}
   
-  const product = await getProductById(id)
-  product? res.send(product): res.status(404).send("Product Not Found")
+  const result = await getProductById(id)
+  result? res.send(result): res.status(404).send("Product Not Found")
   })
   
   //delete product by id
-  router.delete("/products/:id",async (req, res) => {
+  router.delete('/:id',async (req, res) => {
     const { id } = req.params;
     console.log(req.params, id);
-    const product = await deleteProductByID(id)
-    res.send(product);
+    const result = await deleteProductByID(id)
+    res.send(result);
   })
   
   //insert data
-  router.post("/products",express.json(),async (req,res)=>{ //providing middleware as express.json
+  router.post('/',express.json(),async (req,res)=>{ //providing middleware as express.json
    // const newProducts = req.body
    // console.log(newProducts)
    
@@ -79,6 +79,16 @@ router.get("/products", async(req, res) => {
     return res.status(500).send({error:"Internal Server Error"})
    }
     
+  })
+
+   //delete product by id
+   router.put('/:id',async (req, res) => {
+    const { id } = req.params;
+    console.log(req.params, id);
+    const updatedProduct = req.body
+    console.log(updatedProduct)
+    const result = await updateProducts(id,updatedProduct)
+    res.send(result);
   })
 
  export const productRouter = router

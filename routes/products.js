@@ -1,10 +1,7 @@
 import express  from "express"
 import { getAllProducts, getProductById, deleteProductByID, addProducts ,updateProducts} from '../helper.js'
-
-
+import { auth } from "../middleware/auth.js";
 const router = express.Router(); //express router library
-
-
 
 //REST API ENDPOINTS
 //get all products and search query(category, rating and multiple filter)
@@ -33,7 +30,7 @@ router.get('/', async(req, res) => {
   res.send(product);
   })
   //get product by id
-  router.get('/:id',async (req, res) => {
+  router.get('/:id',auth,async (req, res) => {
     const { id } = req.params;
     console.log(req.params, id);
   //--------direct data
